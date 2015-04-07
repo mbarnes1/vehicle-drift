@@ -2,7 +2,8 @@
 
 %% Setup
 close all; clear; clc;
-addpath('../dynamics');
+addpath(genpath('../'));
+pars = GetParameters();
 
 %% Solve for equilibrium points
 
@@ -26,17 +27,16 @@ x0_1 = zeros(3,N1);
 x0_2 = zeros(3,N2);
 x0_3 = zeros(3,N3);
 
-options = optimoptions('fsolve');
+options = optimoptions('fsolve', 'Display', 'off');
 
 for i = 1:N1
     % Define equilibrium dynamics function for these Ux and delta
-    eq_dynamics1 = @(x) dynamics(Ux_eq, delta1(i), x(1), x(2), x(3));
+    eq_dynamics1 = @(x) dynamics([x(3), x(1), Ux_eq], [delta1(i), x(2)], pars);
     
     % Define initialization point
-    x0_1(:,i) = [0.6;                           % r - yaw rate (rad / s)
-%                 -1000/15*delta_deg1(i)+1500;    % FxR - rear longitudinal force (N)
-                1500;
-                (delta_deg1(i)-10)*pi/180];     % Beta - sideslip angle in radians (rad)
+    x0_1(:,i) = [0.6;                       % r - yaw rate (rad / s)
+                1500;                       % FxR - rear longitudinal force (N)
+                (delta_deg1(i)-10)*pi/180]; % Beta - sideslip angle in radians (rad)
     
     % Solve for equilibrium point
     eq_points1(:,i) = fsolve(eq_dynamics1, x0_1(:,i), options);
@@ -44,12 +44,11 @@ end
 
 for i = 1:N2
     % Define equilibrium dynamics function for these Ux and delta
-    eq_dynamics2 = @(x) dynamics(Ux_eq, delta2(i), x(1), x(2), x(3));
+    eq_dynamics2 = @(x) dynamics([x(3), x(1), Ux_eq], [delta2(i), x(2)], pars);
     
     % Define initialization point
     x0_2(:,i) = [-0.6;                      % r - yaw rate (rad / s)
-%                 1000/15*delta_deg2(i)+1500; % FxR - rear longitudinal force (N)
-                1500;
+                1500;                       % FxR - rear longitudinal force (N)
                 (delta_deg2(i)+10)*pi/180]; % Beta - sideslip angle in radians (rad)
     
     % Solve for equilibrium point
@@ -58,12 +57,11 @@ end
 
 for i = 1:N3
     % Define equilibrium dynamics function for these Ux and delta
-    eq_dynamics3 = @(x) dynamics(Ux_eq, delta3(i), x(1), x(2), x(3));
+    eq_dynamics3 = @(x) dynamics([x(3), x(1), Ux_eq], [delta3(i), x(2)], pars);
     
     % Define initialization point
     x0_3(:,i) = [0.05*delta_deg3(i);    % r - yaw rate (rad / s)
-%                 3*delta_deg3(i)^2;      % FxR - rear longitudinal force (N)
-                0;
+                3*delta_deg3(i)^2;      % FxR - rear longitudinal force (N)
                 0*pi/180];              % Beta - sideslip angle in radians (rad)
     
     % Solve for equilibrium point
@@ -109,6 +107,6 @@ plot(delta_deg3, eq_points3(3,:)*180/pi, 'b*', 'MarkerSize', 8);
 xlabel('\delta^{eq}(deg)','FontSize', FS);
 ylabel('\beta^{eq} (deg)','FontSize', FS);
 
-saveas(h1, 'r', 'png');
-saveas(h2, 'FxR', 'png');
-saveas(h3, 'beta', 'png');
+% saveas(h1, 'r', 'png');
+% saveas(h2, 'FxR', 'png');
+% saveas(h3, 'beta', 'png');
