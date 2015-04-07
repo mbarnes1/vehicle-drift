@@ -2,6 +2,7 @@
 
 %% Setup
 close all; clear; clc;
+addpath('../dynamics');
 
 %% Solve for equilibrium points
 
@@ -82,9 +83,9 @@ h1 = figure; hold on;
 % set(h1, 'defaulttextinterpreter','latex');
 % plot(delta_deg1, x0_1(1,:), 'r^', delta_deg2, x0_2(1,:), 'r^');
 % plot(delta_deg3, x0_3(1,:), 'r*');
-plot(delta_deg1, eq_points1(1,:), 'b^');
-plot(delta_deg2, eq_points2(1,:), 'b^');
-plot(delta_deg3, eq_points3(1,:), 'b*');
+plot(delta_deg1, eq_points1(1,:), 'b^', 'MarkerSize', 8);
+plot(delta_deg2, eq_points2(1,:), 'b^', 'MarkerSize', 8);
+plot(delta_deg3, eq_points3(1,:), 'b*', 'MarkerSize', 8);
 xlabel('\delta^{eq}(deg)','FontSize', FS);
 ylabel('r^{eq} (rad/s)','FontSize', FS);
 
@@ -92,9 +93,9 @@ h2 = figure; hold on;
 % set(h2, 'defaulttextinterpreter','latex');
 % plot(delta_deg1, x0_1(2,:), 'r^', delta_deg2, x0_2(2,:), 'r^');
 % plot(delta_deg3, x0_3(2,:), 'r*');
-plot(delta_deg1, eq_points1(2,:), 'b^');
-plot(delta_deg2, eq_points2(2,:), 'b^');
-plot(delta_deg3, eq_points3(2,:), 'b*');
+plot(delta_deg1, eq_points1(2,:), 'b^', 'MarkerSize', 8);
+plot(delta_deg2, eq_points2(2,:), 'b^', 'MarkerSize', 8);
+plot(delta_deg3, eq_points3(2,:), 'b*', 'MarkerSize', 8);
 xlabel('\delta^{eq}(deg)','FontSize', FS);
 ylabel('F_{xR}^{eq} (N)','FontSize', FS);
 
@@ -102,35 +103,12 @@ h3 = figure; hold on;
 % set(h3, 'defaulttextinterpreter','latex');
 % plot(delta_deg1, x0_1(3,:)*180/pi, 'r^', delta_deg2, x0_2(3,:)*180/pi, 'r^');
 % plot(delta_deg3, x0_3(3,:)*180/pi, 'r*');
-plot(delta_deg1, eq_points1(3,:)*180/pi, 'b^');
-plot(delta_deg2, eq_points2(3,:)*180/pi, 'b^');
-plot(delta_deg3, eq_points3(3,:)*180/pi, 'b*');
+plot(delta_deg1, eq_points1(3,:)*180/pi, 'b^', 'MarkerSize', 8);
+plot(delta_deg2, eq_points2(3,:)*180/pi, 'b^', 'MarkerSize', 8);
+plot(delta_deg3, eq_points3(3,:)*180/pi, 'b*', 'MarkerSize', 8);
 xlabel('\delta^{eq}(deg)','FontSize', FS);
 ylabel('\beta^{eq} (deg)','FontSize', FS);
 
 saveas(h1, 'r', 'png');
 saveas(h2, 'FxR', 'png');
 saveas(h3, 'beta', 'png');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
