@@ -1,4 +1,4 @@
-function D = dynamics(state, control, pars)
+function D = Dynamics(state, control, pars)
 % Extract state and control inputs
 Beta    = state(1);
 r       = state(2);
@@ -20,11 +20,11 @@ mu = pars.mu;
 % Compute lateral forces
 alphaF = atan(Beta + a/Ux*r) - delta;
 FzF = b*m*g/L;
-FyF = fiala('front', CaF, mu, FzF, FxR, alphaF);
+FyF = Fiala('front', CaF, mu, FzF, FxR, alphaF);
 
 alphaR = atan(Beta - b/Ux*r);
 FzR = a*m*g/L;
-FyR = fiala('rear', CaR, mu, FzR, FxR, alphaR);
+FyR = Fiala('rear', CaR, mu, FzR, FxR, alphaR);
 
 % Compute dynamics
 D = zeros(3,1);

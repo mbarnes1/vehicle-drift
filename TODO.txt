@@ -1,0 +1,11 @@
+############## Overview ##############
+The baseline goal of this project is to implement a controller that will use a single equilibrium point to stabilize the vehicle dynamics around. We could go beyond this by recomputing new equilibria according to the desired trajectory. 
+
+In order to implement this baseline functionality, we are simply hard-coding the equilibrium values. 
+
+
+############## TODO ##############
+
+1) Debug the controller
+
+2) Model / compute the actual vehicle trajectory. Right now we're just computing the trajectory of the state (r, beta, Ux)

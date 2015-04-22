@@ -31,7 +31,7 @@ options = optimoptions('fsolve', 'Display', 'off');
 
 for i = 1:N1
     % Define equilibrium dynamics function for these Ux and delta
-    eq_dynamics1 = @(x) dynamics([x(3), x(1), Ux_eq], [delta1(i), x(2)], pars);
+    eq_dynamics1 = @(x) Dynamics([x(3), x(1), Ux_eq], [delta1(i), x(2)], pars);
     
     % Define initialization point
     x0_1(:,i) = [0.6;                       % r - yaw rate (rad / s)
@@ -44,7 +44,7 @@ end
 
 for i = 1:N2
     % Define equilibrium dynamics function for these Ux and delta
-    eq_dynamics2 = @(x) dynamics([x(3), x(1), Ux_eq], [delta2(i), x(2)], pars);
+    eq_dynamics2 = @(x) Dynamics([x(3), x(1), Ux_eq], [delta2(i), x(2)], pars);
     
     % Define initialization point
     x0_2(:,i) = [-0.6;                      % r - yaw rate (rad / s)
@@ -57,7 +57,7 @@ end
 
 for i = 1:N3
     % Define equilibrium dynamics function for these Ux and delta
-    eq_dynamics3 = @(x) dynamics([x(3), x(1), Ux_eq], [delta3(i), x(2)], pars);
+    eq_dynamics3 = @(x) Dynamics([x(3), x(1), Ux_eq], [delta3(i), x(2)], pars);
     
     % Define initialization point
     x0_3(:,i) = [0.05*delta_deg3(i);    % r - yaw rate (rad / s)

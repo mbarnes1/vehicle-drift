@@ -1,4 +1,4 @@
-function Fy = fiala(tire, Ca, mu, Fz, Fx, alpha)
+function Fy = Fiala(tire, Ca, mu, Fz, Fx, alpha)
 % Compute the fiala tire model for front or rear tire
 % Input args:   tire - 'front' or 'rear'
 %               Ca - tire cornering stiffness
