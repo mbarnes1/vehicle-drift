@@ -16,14 +16,14 @@ L = pars.L;
 CaF = pars.CaF;
 CaR = pars.CaR;
 mu = pars.mu; 
+FzF = pars.FzF;
+FzR = pars.FzR;
 
 % Compute lateral forces
 alphaF = atan(Beta + a/Ux*r) - delta;
-FzF = b*m*g/L;
 FyF = Fiala('front', CaF, mu, FzF, FxR, alphaF);
 
 alphaR = atan(Beta - b/Ux*r);
-FzR = a*m*g/L;
 FyR = Fiala('rear', CaR, mu, FzR, FxR, alphaR);
 
 % Compute dynamics

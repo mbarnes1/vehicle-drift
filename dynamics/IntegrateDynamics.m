@@ -1,8 +1,5 @@
 function x_plus = IntegrateDynamics(dx_plus,x,dt)
-
-x_plus = d
-
-
+x_plus = x + dx_plus*dt;
 end
 
 

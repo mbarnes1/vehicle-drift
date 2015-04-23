@@ -5,12 +5,13 @@ addpath(genpath('../'));
 %% Get initial states, parameters (controller gains, etc.)
 pars = GetParameters();
 
-ts = linspace(pars.t0, pars.T, pars.dt);
+% ts = linspace(pars.t0, pars.T, pars.dt);
+ts = pars.t0:pars.dt:pars.T;
 nsteps = length(ts);
 
 %% Define the initial state x and control inputs u
 x = pars.x0;    % [beta; r; U_x]
-u = pars.u0;    % [F_xR; delta]
+u = pars.u0;    % [delta; F_xR]
 
 %% Store state, control inputs
 Pos = NaN(3,nsteps);
@@ -26,7 +27,7 @@ for t = 1:nsteps
     %% Compute dynamics
     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
     
-    x_plus = IntegrateDynamics(dx_plus,x,dt);
+    x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
 
     %% Display
 %     DisplayCar(x_plus,u_plus,pars);

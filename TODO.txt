@@ -6,6 +6,8 @@ In order to implement this baseline functionality, we are simply hard-coding the
 
 ############## TODO ##############
 
-1) Debug the controller
+(1) Debug the controller
+	- Implement inverse fiala model
+	- What is FyR in Mode 1? 
 
-2) Model / compute the actual vehicle trajectory. Right now we're just computing the trajectory of the state (r, beta, Ux)
+(2) Model / compute the actual vehicle trajectory. Right now we're just computing the trajectory of the state (r, beta, Ux)

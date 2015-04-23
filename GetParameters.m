@@ -20,6 +20,10 @@ pars.CaF = 120000;      % N / rad
 pars.CaR = 175000;      % N / rad
 pars.mu = 0.55;         % dimensionless
 
+% Compute the normal forces since those are assumed constant
+pars.FzF = pars.b*pars.m*pars.g/pars.L;     % N
+pars.FzR = pars.a*pars.m*pars.g/pars.L;     % N
+
 %% Equilibrium point - hard coded
 pars.delta_eq   = -12*pi/180;   % degrees
 pars.Ux_eq      = 8;            % m / s
@@ -31,5 +35,10 @@ pars.FyF_eq     = 3807;         % N
 pars.FyR_eq     = 4469;         % N
 
 pars.x_eq = [pars.beta_eq; pars.r_eq; pars.Ux_eq];
+
+%% Controller parameters
+pars.K_beta = 2;
+pars.K_r    = 4;
+pats.K_Ux   = 0.846;
 
 end
