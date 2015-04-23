@@ -3,11 +3,13 @@ function pars = GetParameters()
 %% Timing
 pars.t0 = 0;            % seconds
 pars.T = 10;            % seconds
-pars.dt = 1e-4;         % seconds
+pars.dt = 1e-3;         % seconds
 
 %% Initial state and control
-pars.x0 = zeros(3,1);
-pars.u0 = zeros(3,1);
+pars.x0 = [(-20.44+5)*pi/180;       % Beta
+            0.400;                  % r
+            6];                     % Ux
+pars.u0 = [0;0;0];
 
 %% Vehicle parameters
 pars.g = 9.8;           % m / s^2
@@ -42,10 +44,11 @@ pars.K_r    = 4;
 pars.K_Ux   = 0.846;
 
 %% Inverse fiala look up table
-pars.alpha = (-40:0.01:40)*pi/180;
-pars.FyF = zeros(length(pars.alpha));
-for i = 1:length(pars.alpha)
-    pars.FyF(i) = Fiala(tire, Ca, mu, Fz, Fx, alpha(i));
+pars.alphaF_LUT = (-40:0.01:40)*pi/180;
+pars.FyF_LUT = zeros(1,length(pars.alphaF_LUT));
+for i = 1:length(pars.alphaF_LUT)
+    pars.FyF_LUT(i) = Fiala('front', pars.CaF, pars.mu, pars.FzF, ...
+        0, pars.alphaF_LUT(i));
 end
 
 

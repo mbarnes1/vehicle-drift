@@ -39,9 +39,16 @@ for t = 1:nsteps
 
     dX(:,t) = dx_plus;
     X(:,t) = x_plus;
-    U(:,t) = t_plus;
-
+    U(:,t) = u_plus;
+    fprintf('t = %f\n', t);
 end
+
+figure; hold on;
+plot(t, X(1,:)*180/pi, 'b');
+plot(t, ones(length(nsteps), 1)*pars.beta_eq*180/pi, 'g');
+
+
+
 
 
 
