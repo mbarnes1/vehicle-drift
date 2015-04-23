@@ -39,6 +39,18 @@ pars.x_eq = [pars.beta_eq; pars.r_eq; pars.Ux_eq];
 %% Controller parameters
 pars.K_beta = 2;
 pars.K_r    = 4;
-pats.K_Ux   = 0.846;
+pars.K_Ux   = 0.846;
+
+%% Inverse fiala look up table
+pars.alpha = (-40:0.01:40)*pi/180;
+pars.FyF = zeros(length(pars.alpha));
+for i = 1:length(pars.alpha)
+    pars.FyF(i) = Fiala(tire, Ca, mu, Fz, Fx, alpha(i));
+end
+
 
 end
+
+
+
+
