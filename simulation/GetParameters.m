@@ -6,10 +6,10 @@ pars.T = 10;            % seconds
 pars.dt = 1e-3;         % seconds
 
 %% Initial state and control
-pars.x0 = [(-20.44+5)*pi/180;       % Beta
-            0.400;                  % r
-            6];                     % Ux
-pars.u0 = [0;0;0];
+pars.x0 = [(-20.44)*pi/180;       % Beta
+            0.600;                  % r
+            8];                     % Ux
+pars.u0 = [0;0];
 
 %% Vehicle parameters
 pars.g = 9.8;           % m / s^2
@@ -30,8 +30,8 @@ pars.FzR = pars.a*pars.m*pars.g/pars.L;     % N
 pars.delta_eq   = -12*pi/180;   % rad
 pars.Ux_eq      = 8;            % m / s
 
-pars.r_eq       = 0.600;        % rad /s
 pars.beta_eq    = -20.44*pi/180;% rad /s
+pars.r_eq       = 0.600;        % rad /s
 pars.FxR_eq     = 2293;         % N
 pars.FyF_eq     = 3807;         % N
 pars.FyR_eq     = 4469;         % N
@@ -45,14 +45,6 @@ pars.K_Ux   = 0.846;
 % pars.K_beta = -3060;
 % pars.K_r    = 6717.4;
 % pars.K_Ux   = -602.5;
-
-%% Inverse fiala look up table
-pars.alphaF_LUT = (-40:0.01:40)*pi/180;
-pars.FyF_LUT = zeros(1,length(pars.alphaF_LUT));
-for i = 1:length(pars.alphaF_LUT)
-    pars.FyF_LUT(i) = Fiala('front', pars.CaF, pars.mu, pars.FzF, ...
-        0, pars.alphaF_LUT(i));
-end
 
 
 end

@@ -19,11 +19,12 @@ end
 tan_alpha_sl = 3*xi*mu*Fz/Ca;
 alpha_sl = atan(tan_alpha_sl);
 
-if (abs(alpha) < alpha_sl)
-    Fy = -Ca*z + Ca^2/(3*xi*mu*Fz)*abs(z)*z - Ca^3/(27*xi^2*mu^2*Fz^2)*z^3;
-else
-    Fy = -xi*mu*Fz*sign(alpha);
-end
+idx = abs(alpha) < alpha_sl;
+
+Fy(idx) = -Ca*z(idx) + Ca^2/(3*xi*mu*Fz)*abs(z(idx)).*z(idx) - ...
+    Ca^3/(27*xi^2*mu^2*Fz^2)*z(idx).^3;
+
+Fy(~idx) = -xi*mu*Fz*sign(alpha(~idx));
 
 end
 

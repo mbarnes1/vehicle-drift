@@ -55,8 +55,17 @@ end
 
 %% Plot resulting Beta trajectory
 figure; 
+subplot(3,1,1)
 plot(ts, X(1,:)*180/pi, 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.beta_eq*180/pi, 'g');
+
+subplot(3,1,2)
+plot(ts, X(2,:)*180/pi, 'b'); hold on;
+plot(ts, ones(nsteps, 1)*pars.r_eq*180/pi, 'g');
+
+subplot(3,1,3)
+plot(ts, X(3,:), 'b'); hold on;
+plot(ts, ones(nsteps, 1)*pars.Ux_eq, 'g');
 
 
 

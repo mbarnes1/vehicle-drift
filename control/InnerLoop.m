@@ -3,17 +3,19 @@ function u = InnerLoop(x,e_x,pars)
     [delta, FxR, FyF] = Mode1(x,e_x,pars);
     
     % Mode 2 - Drive force mode
-    if FyF >= pars.mu*pars.FzR
+    if FyF >= pars.mu*pars.FzF
         [delta, FxR] = Mode2(x, e_x, pars);
     end
-    u = [delta; min(FxR, pars.mu*pars.FzR)];
+    u = [delta; FxR];
 end
 
-function [delta_des,FxR_des,FyF] = Mode1(x,e_x,pars)
+function [delta_des,FxR_des,FyF_des] = Mode1(x,e_x,pars)
     % Extract parameters and control constants
     a = pars.a;
     m = pars.m;
+    mu = pars.mu;
     L = pars.L;
+    FzR = pars.FzR;
     FxR_eq = pars.FxR_eq;
     r_eq = pars.r_eq;
     K_beta = pars.K_beta;
@@ -32,19 +34,21 @@ function [delta_des,FxR_des,FyF] = Mode1(x,e_x,pars)
 
     % Compute desired rear drive force and resulting lateral force
     FxR_des = FxR_eq - m*K_Ux * e_Ux;
+    FxR_des = min(FxR_des, mu*FzR);
+    FxR_des = max(FxR_des, -mu*FzR);
     
     % Compute rear lateral force based on current state
-    FyR = a*m/L*r*Ux;   % Page 42 of Thesis - is this valid for normal use?
+    FyR_des = a*m/L*r*Ux;   % Page 42 of Thesis - is this valid for normal use?
                         % If not, then we have to take the state derivative
                         % into account, which means taking the time-step
                         % into account or something... right?
                 
     % Compute desired front lateral force
-    FyF = 1/k1 * ( k2 * FyR - K_beta^2 * e_beta - K_beta * r_eq - ...
+    FyF_des = 1/k1 * ( k2 * FyR_des - K_beta^2 * e_beta - K_beta * r_eq - ...
         (K_beta + K_r) * e_r );
     
     % Compute desired steering angle
-    delta_des = FyF2delta(FyF, x, pars);
+    delta_des = FyF2delta(x, FyF_des, FxR_des, pars);
 end
 
 function [delta_des,FxR_des] = Mode2(x,e_x,pars)
@@ -66,21 +70,24 @@ function [delta_des,FxR_des] = Mode2(x,e_x,pars)
     % Compute desired front lateral force - saturated
     FyF_des = mu * FzF;
     
-    % Compute desired steering angle
-    delta_des = FyF2delta(FyF_des, x, pars);
-    
     % Compute desired rear lateral force
     FyR_des = 1/k2 * (k1 * mu * FzF + K_beta^2 * e_beta + K_beta * r_eq + ...
         (K_beta + K_r) * e_r );
     FyR_des = min(FyR_des, mu*FzR);
+    FyR_des = max(FyR_des, -mu*FzR);
     
     % Compute desired rear longitudinal force
     FxR_des = sqrt((mu*FzR)^2 - (FyR_des)^2);
-    
+    FxR_des = min(FxR_des, mu*FzR);
+    FxR_des = max(FxR_des, -mu*FzR);
+        
     if ~isreal(FxR_des)
         error('Mode 2 Error: FyR_des is larger than mu*FzR')
     end
     
+    % Compute desired steering angle
+    delta_des = FyF2delta(x, FyF_des, FxR_des, pars);
+
 end
 
 function [k1,k2] = Compute_ks(Ux,pars)
@@ -95,7 +102,7 @@ function [k1,k2] = Compute_ks(Ux,pars)
     k2 = b/Iz + Kbeta / (m * Ux);
 end
 
-function delta = FyF2delta(FyF,x,pars)
+function delta = FyF2delta(x,FyF,FxR,pars)
     % Extract parameters
     a = pars.a;
     
@@ -106,15 +113,33 @@ function delta = FyF2delta(FyF,x,pars)
 
     % Map front lateral force to a desired front tire slip angle and
     % compute the corresponding steer angle command
-    alphaF = InverseFiala(FyF,pars); % TODO: implement inverse Fiala
-    delta = alphaF - atan(beta + a/Ux*r);
+    alphaF = InverseFiala(FyF,FxR,pars); 
+    delta = alphaF - atan(beta + a/Ux*r); % SIGN?!?!?!?!
 end
 
-function alphaF = InverseFiala(FyF, pars)
-    % Use pre-computed look-up table to determine alphaF from the desired
-    % front lateral force
-    difference = abs(FyF - pars.FyF_LUT);
+function alphaF = InverseFiala(FyF,FxR,pars)
+    % Compute FyF_LUT for various alphas
+    alphaF_LUT = (-20:0.005:20)*pi/180;
+    FyF_LUT = Fiala('rear', pars.CaR, pars.mu, pars.FzR, FxR, alphaF_LUT);
+    
+    difference = abs(FyF - FyF_LUT);
     [~, ind] = min(difference);
-    alphaF = pars.alphaF_LUT(ind);
+    alphaF = alphaF_LUT(ind);
+    
+    % Compute forward Fiala model to verify precision
+    FyF_test = Fiala('rear', pars.CaR, pars.mu, pars.FzR, FxR, alphaF);
+    
+    if (abs((FyF_test - FyF)/FyF) > 0.05) && (abs((FyF_test - FyF)) > 200)
+        error('Inverse Fiala model not accurate')
+    end
+    
 end
+
+
+
+
+
+
+
+
 
