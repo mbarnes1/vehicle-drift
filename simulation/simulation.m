@@ -14,7 +14,7 @@ x = pars.x0;    % [beta; r; U_x]
 u = pars.u0;    % [delta; F_xR]
 
 %% Store state, control inputs
-Pos = NaN(3,nsteps);
+VS = NaN(3,nsteps);
 dX  = NaN(3,nsteps);
 X   = NaN(3,nsteps);
 U   = NaN(2,nsteps);

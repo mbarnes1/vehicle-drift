@@ -38,6 +38,9 @@ pars.FyR_eq     = 4469;         % N
 
 pars.x_eq = [pars.beta_eq; pars.r_eq; pars.Ux_eq];
 
+%% Define control limits
+pars.FxR_max = 0.7*pars.mu*pars.FzR;
+
 %% Controller parameters
 pars.K_beta = 2;
 pars.K_r    = 4;
