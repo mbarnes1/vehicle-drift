@@ -21,12 +21,21 @@ U   = NaN(2,nsteps);
 
 %% Run simulation
 for t = 1:nsteps
+    if t == 1237
+        aaa = 0;
+    end
     %% Get control inputs
     u_plus = Controller(x,u,pars); % Compute control inputs u
 
     %% Compute dynamics
     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
     
+    if (norm(imag(u_plus)) > 0)
+        error('Complex control input')
+    elseif (norm(imag(dx_plus)) > 0)
+        error('Complex integrated dynamics');
+    end
+        
     x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
 
     %% Display
@@ -41,6 +50,7 @@ for t = 1:nsteps
     X(:,t) = x_plus;
     U(:,t) = u_plus;
     fprintf('t = %f\n', t);
+
 end
 
 figure; hold on;

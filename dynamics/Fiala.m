@@ -11,7 +11,7 @@ z = tan(alpha);
 if strcmp(tire, 'front')
     xi = 1;
 elseif strcmp(tire, 'rear')
-    xi = sqrt((mu*Fz)^2 - Fx^2)/(mu*Fz);
+    xi = sqrt(max((mu*Fz)^2 - Fx^2,0))/(mu*Fz);
 else
     error('Invalid tire input value');
 end

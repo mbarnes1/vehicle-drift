@@ -11,3 +11,5 @@ In order to implement this baseline functionality, we are simply hard-coding the
 	- What is FyR in Mode 1? 
 
 (2) Model / compute the actual vehicle trajectory. Right now we're just computing the trajectory of the state (r, beta, Ux)
+
+(3) Debug imaginary numbers in dynamics / control when computing forces on friction circle
