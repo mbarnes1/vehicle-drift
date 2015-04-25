@@ -32,4 +32,8 @@ D(1) = 1/(m*Ux)*(FyF + FyR) - r;            % Beta dot
 D(2) = 1/Iz*(a*FyF-b*FyR);                  % r dot
 D(3) = 1/m*(FxR-FyF*sin(delta))+r*Ux*Beta;  % Ux dot
 
+if ~isreal(D)
+    error('Complex dynamics')
+end
+
 end

@@ -21,7 +21,7 @@ U   = NaN(2,nsteps);
 
 %% Run simulation
 for t = 1:nsteps
-    if t == 1237
+    if t == 6133
         aaa = 0;
     end
     %% Get control inputs
@@ -30,9 +30,9 @@ for t = 1:nsteps
     %% Compute dynamics
     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
     
-    if (norm(imag(u_plus)) > 0)
+    if ~isreal(u_plus)
         error('Complex control input')
-    elseif (norm(imag(dx_plus)) > 0)
+    elseif ~isreal(dx_plus)
         error('Complex integrated dynamics');
     end
         
@@ -53,9 +53,10 @@ for t = 1:nsteps
 
 end
 
-figure; hold on;
-plot(t, X(1,:)*180/pi, 'b');
-plot(t, ones(length(nsteps), 1)*pars.beta_eq*180/pi, 'g');
+%% Plot resulting Beta trajectory
+figure; 
+plot(ts, X(1,:)*180/pi, 'b'); hold on;
+plot(ts, ones(length(nsteps), 1)*pars.beta_eq*180/pi, 'g');
 
 
 

@@ -6,7 +6,7 @@ function u = InnerLoop(x,e_x,pars)
     if FyF >= pars.mu*pars.FzR
         [delta, FxR] = Mode2(x, e_x, pars);
     end
-    u = [delta; FxR];
+    u = [delta; min(FxR, pars.mu*pars.FzR)];
 end
 
 function [delta_des,FxR_des,FyF] = Mode1(x,e_x,pars)
@@ -70,11 +70,17 @@ function [delta_des,FxR_des] = Mode2(x,e_x,pars)
     delta_des = FyF2delta(FyF_des, x, pars);
     
     % Compute desired rear lateral force
-    FyR_des = 1/k2 * (k1 * FzF + K_beta^2 * e_beta + K_beta * r_eq + ...
+    FyR_des = 1/k2 * (k1 * mu * FzF + K_beta^2 * e_beta + K_beta * r_eq + ...
         (K_beta + K_r) * e_r );
+    FyR_des = min(FyR_des, mu*FzR);
     
     % Compute desired rear longitudinal force
     FxR_des = sqrt((mu*FzR)^2 - (FyR_des)^2);
+    
+    if ~isreal(FxR_des)
+        error('Mode 2 Error: FyR_des is larger than mu*FzR')
+    end
+    
 end
 
 function [k1,k2] = Compute_ks(Ux,pars)
