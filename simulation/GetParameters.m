@@ -6,10 +6,11 @@ pars.T = 10;            % seconds
 pars.dt = 1e-3;         % seconds
 
 %% Initial state and control
-pars.x0 = [(-20.44)*pi/180;       % Beta
+pars.x0 = [(-20.44)*pi/180;         % Beta
             0.600;                  % r
             8];                     % Ux
 pars.u0 = [0;0];
+pars.vs0 = [0;0;0];             % Initial vehicle position and orientation
 
 %% Vehicle parameters
 pars.g = 9.8;           % m / s^2

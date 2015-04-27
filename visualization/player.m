@@ -11,20 +11,19 @@ function [M] = player(X, Y, a, b, phi, delta_f)
 % Outputs:
 %       M - movie frames (use movie(M) to view, mpgwrite(M) to save)
 
-
 dsample = 10;
 % Define the area to be recorded
 rect = get(gcf,'Position');
 rect(1:2) = [0 0];
 % Generate and record the frames
-for i = 1:length(t)/dsample
+for i = 1:length(X)/dsample
   %Plot the overall trajectory
   j = i*dsample;  %downsampling
   subplot(2,1,1);
   plot(X, Y,'g--'); hold on; %trajectory
   cg = [X(j),Y(j)];  %vehile center of gravity in longitudinal direction
   plot(cg(1), cg(2),'b.');  %plot current location
-  axis([0  704.7652 -170.4871  385.3680]);
+  axis([min(X) max(X) min(Y) max(Y)]);
   xlabel('X (m)'), ylabel('Y (m)'), title('Saturated Tire Model Vehicle');
   subplot(2,1,2); %zoomed in plot
   plot(X, Y,'g--'); hold on;  %trajectory

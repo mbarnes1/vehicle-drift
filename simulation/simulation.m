@@ -12,6 +12,7 @@ nsteps = length(ts);
 %% Define the initial state x and control inputs u
 x = pars.x0;    % [beta; r; U_x]
 u = pars.u0;    % [delta; F_xR]
+vs = pars.vs0;  % [X;Y;Theta]
 
 %% Store state, control inputs
 VS = NaN(3,nsteps);
@@ -29,28 +30,24 @@ for t = 1:nsteps
 
     %% Compute dynamics
     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
-    
-    if ~isreal(u_plus)
-        error('Complex control input')
-    elseif ~isreal(dx_plus)
-        error('Complex integrated dynamics');
-    end
-        
     x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
 
-    %% Display
-%     DisplayCar(x_plus,u_plus,pars);
+    %% Compute vehicle position
+    vs_plus = State(vs, x_plus, pars.dt);
     
-    %% Update and save the states
+    %% Update the states
     dx = dx_plus;
     x = x_plus;
     u = u_plus;
+    vs = vs_plus;
 
+    %% Save the states for plotting
     dX(:,t) = dx_plus;
     X(:,t) = x_plus;
     U(:,t) = u_plus;
-    fprintf('t = %f\n', t);
+    VS(:,t) = vs_plus;
 
+    fprintf('t = %f\n', t);
 end
 
 %% Plot resulting Beta trajectory
@@ -68,6 +65,9 @@ plot(ts, X(3,:), 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.Ux_eq, 'g');
 
 
+%% Visualize the trajectory
+
+player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
 
 
 
