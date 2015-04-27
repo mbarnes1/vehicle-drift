@@ -1,4 +1,4 @@
-function u_plus = Controller(x,u,pars)
+function [u_plus, mode] = Controller(x,u,pars)
 %% Compute state error and extract sideslip error
 e_x = x - pars.x_eq;
 e_beta = e_x(1);
@@ -11,7 +11,7 @@ e_r = x(2) - r_des;
 e_x(2) = e_r;
 
 %% Inner looop controller 
-u_plus = InnerLoop(x, e_x, pars);
+[u_plus, mode] = InnerLoop(x, e_x, pars);
 
 end
 

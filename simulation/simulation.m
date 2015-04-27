@@ -19,6 +19,7 @@ VS = NaN(3,nsteps);
 dX  = NaN(3,nsteps);
 X   = NaN(3,nsteps);
 U   = NaN(2,nsteps);
+mode = zeros(nsteps,1);
 
 %% Run simulation
 for t = 1:nsteps
@@ -26,8 +27,9 @@ for t = 1:nsteps
         aaa = 0;
     end
     %% Get control inputs
-    u_plus = Controller(x,u,pars); % Compute control inputs u
-
+    [u_plus, mode_i] = Controller(x,u,pars); % Compute control inputs u
+    mode(t) = mode_i;
+    
     %% Compute dynamics with ode45
 %     u_plus = pars.u0;
     
@@ -56,20 +58,24 @@ end
 
 %% Plot resulting Beta trajectory
 figure; 
-subplot(3,1,1)
+subplot(2,2,1)
 plot(ts, X(1,:)*180/pi, 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.beta_eq*180/pi, 'g');
 xlabel('Time (s)'); ylabel('\beta (degrees)');
 
-subplot(3,1,2)
+subplot(2,2,2)
 plot(ts, X(2,:)*180/pi, 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.r_eq*180/pi, 'g');
 xlabel('Time (s)'); ylabel('r (degrees / sec)');
 
-subplot(3,1,3)
+subplot(2,2,3)
 plot(ts, X(3,:), 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.Ux_eq, 'g');
 xlabel('Time (s)'); ylabel('U_X (m/s)');
+
+subplot(2,2,4)
+area(ts, mode); hold on;
+xlabel('Time (s)'); ylabel('Mode');
 
 figure; 
 subplot(2,1,1)
@@ -85,7 +91,7 @@ xlabel('Time (s)'); ylabel('F_{X}R (N)');
 
 %% Visualize the trajectory
 
-% player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
+player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
 
 
 

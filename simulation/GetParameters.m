@@ -49,6 +49,11 @@ pars.FxR_max = pars.mu*pars.FzR;
 pars.K_beta = 2;
 pars.K_r    = 4;
 pars.K_Ux   = 0.846;
+
+% pars.K_beta = -3060;
+% pars.K_r    = 6717.4;
+% pars.K_Ux   = -602.5;
+
 % pars.K_beta = -3060;
 % pars.K_r    = 6717.4;
 % pars.K_Ux   = -602.5;
