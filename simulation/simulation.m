@@ -28,27 +28,30 @@ for t = 1:nsteps
     %% Get control inputs
     u_plus = Controller(x,u,pars); % Compute control inputs u
 
-    %% Compute dynamics
-    u_plus = pars.u0;
-    dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
-    x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
+    %% Compute dynamics with ode45
+%     u_plus = pars.u0;
+    
+    [~, x_plus] = ode45(@(t,x) Dynamics(x,u_plus,pars),[0 pars.dt],x);
+    x_plus = x_plus(end,:)';
+    
+    %% Compute dynamics with euler integration
+%     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
+%     x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
 
     %% Compute vehicle position
     vs_plus = State(vs, x_plus, pars.dt);
     
     %% Update the states
-    dx = dx_plus;
     x = x_plus;
     u = u_plus;
     vs = vs_plus;
 
     %% Save the states for plotting
-    dX(:,t) = dx_plus;
     X(:,t) = x_plus;
     U(:,t) = u_plus;
     VS(:,t) = vs_plus;
 
-    fprintf('t = %f\n', t);
+    fprintf('t = %.0f\n', t);
 end
 
 %% Plot resulting Beta trajectory
@@ -82,7 +85,7 @@ xlabel('Time (s)'); ylabel('F_{X}R (N)');
 
 %% Visualize the trajectory
 
-player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
+% player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
 
 
 

@@ -5,9 +5,9 @@ function u = InnerLoop(x,e_x,pars)
     % Mode 2 - Drive force mode
     if FyF >= pars.mu*pars.FzF
         [delta, FxR] = Mode2(x, e_x, pars);
-%         fprintf('Mode 2\n');
+        fprintf('Mode 2\n');
     else
-%         fprintf('Mode 1\n');
+        fprintf('Mode 1\n');
     end
     u = [delta; FxR];
 end
@@ -37,15 +37,12 @@ function [delta_des,FxR_des,FyF_des] = Mode1(x,e_x,pars)
     [k1,k2] = Compute_ks(x(3), pars);
 
     % Compute desired rear drive force and resulting lateral force
-    FxR_des = FxR_eq - m*K_Ux * e_Ux;
+    FxR_des = FxR_eq - m * K_Ux * e_Ux;
     FxR_des = min(FxR_des, FxR_max);
-    FxR_des = max(FxR_des, -FxR_max);
+    FxR_des = max(FxR_des, 0);
     
     % Compute rear lateral force based on current state
     FyR_des = a*m/L*r*Ux;   % Page 42 of Thesis - is this valid for normal use?
-                        % If not, then we have to take the state derivative
-                        % into account, which means taking the time-step
-                        % into account or something... right?
                 
     % Compute desired front lateral force
     FyF_des = 1/k1 * ( k2 * FyR_des - K_beta^2 * e_beta - K_beta * r_eq - ...
@@ -84,7 +81,7 @@ function [delta_des,FxR_des] = Mode2(x,e_x,pars)
     % Compute desired rear longitudinal force
     FxR_des = sqrt((mu*FzR)^2 - (FyR_des)^2);
     FxR_des = min(FxR_des, FxR_max);
-    FxR_des = max(FxR_des, -FxR_max);
+    FxR_des = max(FxR_des, 0);
         
     if ~isreal(FxR_des)
         error('Mode 2 Error: FyR_des is larger than mu*FzR')
@@ -124,19 +121,23 @@ end
 
 function alphaF = InverseFiala(FyF,FxR,pars)
     % Compute FyF_LUT for various alphas
-    alphaF_LUT = (-20:0.005:20)*pi/180;
-    FyF_LUT = Fiala('rear', pars.CaR, pars.mu, pars.FzR, FxR, alphaF_LUT);
+    alphaF_LUT = (-20:0.001:20)*pi/180;
+    FyF_LUT = Fiala('front', pars.CaR, pars.mu, pars.FzR, 0, alphaF_LUT);
     
     difference = abs(FyF - FyF_LUT);
     [~, ind] = min(difference);
     alphaF = alphaF_LUT(ind);
     
     % Compute forward Fiala model to verify precision
-    FyF_test = Fiala('rear', pars.CaR, pars.mu, pars.FzR, FxR, alphaF);
+    FyF_test = Fiala('front', pars.CaR, pars.mu, pars.FzR, 0, alphaF);
     
-%     if (abs((FyF_test - FyF)/FyF) > 0.05) && (abs((FyF_test - FyF)) > 400)
-%         error('Inverse Fiala model not accurate')
-%     end
+    fprintf('FyF: %.2f Test: %.2f Alpha: %.2f\n', FyF, FyF_test, alphaF);
+    
+    if (abs((FyF_test - FyF)/FyF) > 0.05) && (abs((FyF_test - FyF)) > 200)
+        fprintf('Inverse Fiala errors: %.2f, %.2f\n', ...
+            (FyF_test - FyF)/FyF, FyF_test - FyF);
+        error('Inverse Fiala model not accurate')
+    end
     
 end
 

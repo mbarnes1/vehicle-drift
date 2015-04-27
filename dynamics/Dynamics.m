@@ -7,7 +7,7 @@ delta   = control(1);
 FxR     = control(2);
 
 % Define parameters
-g = pars.g; 
+g = pars.g;
 m = pars.m;
 Iz = pars.Iz;
 a = pars.a;

@@ -3,7 +3,7 @@ function pars = GetParameters()
 %% Timing
 pars.t0 = 0;            % seconds
 pars.T = 10;            % seconds
-pars.dt = 1e-3;         % seconds
+pars.dt = 1e-2;         % seconds
 
 %% Initial state and control
 pars.x0 = [(-20.44)*pi/180;         % Beta
@@ -32,15 +32,18 @@ pars.delta_eq   = -12*pi/180;   % rad
 pars.Ux_eq      = 8;            % m / s
 
 pars.beta_eq    = -20.44*pi/180;% rad
-pars.r_eq       = 0.600;        % rad /s
+% pars.beta_eq    = -21.35*pi/180;% rad
+pars.r_eq       = 0.600;        % rad / s
+% pars.r_eq       = 0.5061;        % rad / s
 pars.FxR_eq     = 2293;         % N
+% pars.FxR_eq     = 2290;         % N
 pars.FyF_eq     = 3807;         % N
 pars.FyR_eq     = 4469;         % N
 
 pars.x_eq = [pars.beta_eq; pars.r_eq; pars.Ux_eq];
 
 %% Define control limits
-pars.FxR_max = 0.7*pars.mu*pars.FzR;
+pars.FxR_max = pars.mu*pars.FzR;
 
 %% Controller parameters
 pars.K_beta = 2;
