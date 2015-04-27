@@ -9,7 +9,7 @@ pars.dt = 1e-3;         % seconds
 pars.x0 = [(-20.44)*pi/180;         % Beta
             0.600;                  % r
             8];                     % Ux
-pars.u0 = [0;0];
+pars.u0 = [-12*pi/180;2293];
 pars.vs0 = [0;0;0];             % Initial vehicle position and orientation
 
 %% Vehicle parameters
@@ -31,7 +31,7 @@ pars.FzR = pars.a*pars.m*pars.g/pars.L;     % N
 pars.delta_eq   = -12*pi/180;   % rad
 pars.Ux_eq      = 8;            % m / s
 
-pars.beta_eq    = -20.44*pi/180;% rad /s
+pars.beta_eq    = -20.44*pi/180;% rad
 pars.r_eq       = 0.600;        % rad /s
 pars.FxR_eq     = 2293;         % N
 pars.FyF_eq     = 3807;         % N

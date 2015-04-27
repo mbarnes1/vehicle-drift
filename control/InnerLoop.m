@@ -5,9 +5,9 @@ function u = InnerLoop(x,e_x,pars)
     % Mode 2 - Drive force mode
     if FyF >= pars.mu*pars.FzF
         [delta, FxR] = Mode2(x, e_x, pars);
-        fprintf('Mode 2\n');
+%         fprintf('Mode 2\n');
     else
-        fprintf('Mode 1\n');
+%         fprintf('Mode 1\n');
     end
     u = [delta; FxR];
 end
@@ -119,7 +119,7 @@ function delta = FyF2delta(x,FyF,FxR,pars)
     % Map front lateral force to a desired front tire slip angle and
     % compute the corresponding steer angle command
     alphaF = InverseFiala(FyF,FxR,pars); 
-    delta = - alphaF + atan(beta + a/Ux*r); % SIGN?!?!?!?!
+    delta = - alphaF + atan(beta + a/Ux*r);
 end
 
 function alphaF = InverseFiala(FyF,FxR,pars)

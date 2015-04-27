@@ -29,6 +29,7 @@ for t = 1:nsteps
     u_plus = Controller(x,u,pars); % Compute control inputs u
 
     %% Compute dynamics
+    u_plus = pars.u0;
     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
     x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
 
@@ -55,15 +56,29 @@ figure;
 subplot(3,1,1)
 plot(ts, X(1,:)*180/pi, 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.beta_eq*180/pi, 'g');
+xlabel('Time (s)'); ylabel('\beta (degrees)');
 
 subplot(3,1,2)
 plot(ts, X(2,:)*180/pi, 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.r_eq*180/pi, 'g');
+xlabel('Time (s)'); ylabel('r (degrees / sec)');
 
 subplot(3,1,3)
 plot(ts, X(3,:), 'b'); hold on;
 plot(ts, ones(nsteps, 1)*pars.Ux_eq, 'g');
+xlabel('Time (s)'); ylabel('U_X (m/s)');
 
+figure; 
+subplot(2,1,1)
+plot(ts, U(1,:)*180/pi, 'b'); hold on;
+xlabel('Time (s)'); ylabel('\delta_{des} (degrees)');
+
+subplot(2,1,2)
+plot(ts, U(2,:), 'b'); hold on;
+xlabel('Time (s)'); ylabel('F_{X}R (N)');
+
+% figure
+% plot(ts, (X(1,:) - U(1,:))*180/pi)
 
 %% Visualize the trajectory
 
