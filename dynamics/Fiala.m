@@ -28,7 +28,7 @@ Fy(idx) = -Ca*z(idx) + Ca^2/(3*xi*mu*Fz)*abs(z(idx)).*z(idx) - ...
 
 Fy(~idx) = -xi*mu*Fz*sign(alpha(~idx));
 
-sat = idx;
+sat = ~idx;
 
 end
 

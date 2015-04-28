@@ -18,9 +18,9 @@ dsample = 10;
 rect = get(gcf,'Position');
 rect(1:2) = [0 0];
 sat_f(sat_f == 1) = 'r';
-sat_f(sat_f == 0) = 'b';
+sat_f(sat_f == 0) = 'k';
 sat_r(sat_r == 1) = 'r';
-sat_r(sat_r == 0) = 'b';
+sat_r(sat_r == 0) = 'k';
 % Generate and record the frames
 for i = 1:length(X)/dsample
   %Plot the overall trajectory
