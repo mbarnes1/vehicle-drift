@@ -19,7 +19,8 @@ VS = NaN(3,nsteps);
 dX  = NaN(3,nsteps);
 X   = NaN(3,nsteps);
 U   = NaN(2,nsteps);
-mode = zeros(nsteps,1);
+mode = zeros(1,nsteps);
+sat_r = NaN(1,nsteps);
 
 %% Run simulation
 for t = 1:nsteps
@@ -32,9 +33,14 @@ for t = 1:nsteps
     
     %% Compute dynamics with ode45
 %     u_plus = pars.u0;
-    
-%     [~, x_plus] = ode45(@(t,x) Dynamics(x,u_plus,pars),[0 pars.dt],x);
-%     x_plus = x_plus(end,:)';
+    [~, x_plus] = ode45(@(t,x) Dynamics(x,u_plus,pars),[0 pars.dt],x);
+    r = x(2);
+    Ux = x(3);
+    Beta = x(1);
+    alphaR = atan(Beta - pars.b/Ux*r);
+    [~, sat] = Fiala('rear', pars.CaR, pars.mu, pars.FzR, u_plus(2), alphaR);
+    sat_r(t) = sat;
+    x_plus = x_plus(end,:)';    
     
     %% Compute dynamics with euler integration
     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
@@ -91,7 +97,7 @@ xlabel('Time (s)'); ylabel('F_{X}R (N)');
 
 %% Visualize the trajectory
 
-% player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
+player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:), mode-1, sat_r)
 
 
 

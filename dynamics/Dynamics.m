@@ -21,10 +21,10 @@ FzR = pars.FzR;
 
 % Compute lateral forces
 alphaF = atan(Beta + a/Ux*r) - delta;
-FyF = Fiala('front', CaF, mu, FzF, FxR, alphaF);
+[FyF, ~] = Fiala('front', CaF, mu, FzF, FxR, alphaF);
 
 alphaR = atan(Beta - b/Ux*r);
-FyR = Fiala('rear', CaR, mu, FzR, FxR, alphaR);
+[FyR, ~] = Fiala('rear', CaR, mu, FzR, FxR, alphaR);
 
 % Compute dynamics
 D = zeros(3,1);
