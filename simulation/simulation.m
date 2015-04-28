@@ -33,7 +33,6 @@ for t = 1:nsteps
     
     %% Compute dynamics with ode45
 %     u_plus = pars.u0;
-    
     [~, x_plus] = ode45(@(t,x) Dynamics(x,u_plus,pars),[0 pars.dt],x);
     r = x(2);
     Ux = x(3);
@@ -41,12 +40,11 @@ for t = 1:nsteps
     alphaR = atan(Beta - pars.b/Ux*r);
     [~, sat] = Fiala('rear', pars.CaR, pars.mu, pars.FzR, u_plus(2), alphaR);
     sat_r(t) = sat;
-    x_plus = x_plus(end,:)';
-    
+    x_plus = x_plus(end,:)';    
     
     %% Compute dynamics with euler integration
-%     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
-%     x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
+    dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
+    x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
 
     %% Compute vehicle position
     vs_plus = State(vs, x_plus, pars.dt);

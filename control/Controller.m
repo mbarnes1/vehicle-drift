@@ -13,6 +13,10 @@ e_x(2) = e_r;
 %% Inner looop controller 
 [u_plus, mode] = InnerLoop(x, e_x, pars);
 
+%% Limit steering angle
+u_plus(1) = min(pars.delta_max, u_plus(1));
+u_plus(1) = max(-pars.delta_max, u_plus(1));
+
 end
 
 function r_des = SideslipController(e_beta, pars)
