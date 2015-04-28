@@ -1,4 +1,4 @@
-function Fy = Fiala(tire, Ca, mu, Fz, Fx, alpha)
+function [Fy, sat] = Fiala(tire, Ca, mu, Fz, Fx, alpha)
 % Compute the fiala tire model for front or rear tire
 % Input args:   tire - 'front' or 'rear'
 %               Ca - tire cornering stiffness
@@ -6,6 +6,8 @@ function Fy = Fiala(tire, Ca, mu, Fz, Fx, alpha)
 %               Fz - tire normal load
 %               Fx - rear tire longitudinal force
 %               alpha - tire slip angle in radians
+% Output args:  Fy - lateral force
+%               sat - whether tire is saturated, binary
 
 z = tan(alpha);
 if strcmp(tire, 'front')
@@ -25,6 +27,8 @@ Fy(idx) = -Ca*z(idx) + Ca^2/(3*xi*mu*Fz)*abs(z(idx)).*z(idx) - ...
     Ca^3/(27*xi^2*mu^2*Fz^2)*z(idx).^3;
 
 Fy(~idx) = -xi*mu*Fz*sign(alpha(~idx));
+
+sat = idx;
 
 end
 

@@ -21,16 +21,17 @@ FzR = pars.FzR;
 
 % Compute lateral forces
 alphaF = atan(Beta + a/Ux*r) - delta;
-FyF = Fiala('front', CaF, mu, FzF, FxR, alphaF);
+[FyF, ~] = Fiala('front', CaF, mu, FzF, FxR, alphaF);
 
 alphaR = atan(Beta - b/Ux*r);
-FyR = Fiala('rear', CaR, mu, FzR, FxR, alphaR);
+[FyR, sat_r] = Fiala('rear', CaR, mu, FzR, FxR, alphaR);
 
 % Compute dynamics
-D = zeros(3,1);
+D = zeros(4,1);
 D(1) = 1/(m*Ux)*(FyF + FyR) - r;            % Beta dot
 D(2) = 1/Iz*(a*FyF-b*FyR);                  % r dot
 D(3) = 1/m*(FxR-FyF*sin(delta))+r*Ux*Beta;  % Ux dot
+D(4) = sat_r;  % whether rear tire is saturated
 
 if ~isreal(D)
     error('Complex dynamics')

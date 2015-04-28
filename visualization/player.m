@@ -1,4 +1,4 @@
-function [M] = player(X, Y, a, b, phi, delta_f)
+function [M] = player(X, Y, a, b, phi, delta_f, sat_f, sat_r)
 %PLAYER Plots the vehicle state over time
 % Inputs:
 %       X - global x position
@@ -7,6 +7,8 @@ function [M] = player(X, Y, a, b, phi, delta_f)
 %       b - length from vehicle CG to rear
 %       phi - yaw angle
 %       delta_f - front tire steer angle
+%       sat_f - whether front tire is saturated, binary
+%       sat_r - whether rear tire is saturated, binary
 %
 % Outputs:
 %       M - movie frames (use movie(M) to view, mpgwrite(M) to save)
@@ -15,6 +17,10 @@ dsample = 10;
 % Define the area to be recorded
 rect = get(gcf,'Position');
 rect(1:2) = [0 0];
+sat_f(sat_f == 1) = 'r';
+sat_f(sat_f == 0) = 'b';
+sat_r(sat_r == 1) = 'r';
+sat_r(sat_r == 0) = 'b';
 % Generate and record the frames
 for i = 1:length(X)/dsample
   %Plot the overall trajectory
@@ -36,11 +42,11 @@ for i = 1:length(X)/dsample
   % Rear Tire
   d = 0.6; %arbitary tire diameter [m]
   backtire = [rear(1) - d/2*cos(phi(j)), rear(1) + d/2*cos(phi(j)), rear(2) - d/2*sin(phi(j)), rear(2) + d/2*sin(phi(j))];
-  line([backtire(1) backtire(2)],[backtire(3) backtire(4)], 'Color','k','LineWidth',8);
+  line([backtire(1) backtire(2)],[backtire(3) backtire(4)], 'Color',char(sat_r(j)),'LineWidth',8);
   
   % Front tire
   fronttire = [front(1) - d/2*cos(phi(j)+delta_f(j)), front(1) + d/2*cos(phi(j)+delta_f(j)), front(2) - d/2*sin(phi(j)+delta_f(j)), front(2) + d/2*sin(phi(j)+delta_f(j))];
-  line([fronttire(1) fronttire(2)],[fronttire(3) fronttire(4)], 'Color','k','LineWidth',8);
+  line([fronttire(1) fronttire(2)],[fronttire(3) fronttire(4)], 'Color',char(sat_f(j)),'LineWidth',8);
   
   %Zoomed in plot
   axis([X(j)-5*1.25 X(j)+4.25*1.25 Y(j)-1.5*1.25 Y(j)+1.5*1.25]);
