@@ -6,9 +6,9 @@ pars.T = 10;            % seconds
 pars.dt = 1e-2;         % seconds
 
 %% Initial state and control
-pars.x0 = [(-20.44)*pi/180;         % Beta
-            0.600;                  % r
-            8];                     % Ux
+pars.x0 = [(-20.44+20.44+40)*pi/180;         % Beta
+            0.600+0.2;                  % r
+            8+3];                     % Ux
 pars.u0 = [-12*pi/180;2293];
 pars.vs0 = [0;0;0];             % Initial vehicle position and orientation
 
@@ -43,6 +43,7 @@ pars.FyR_eq     = 4469;         % N
 pars.x_eq = [pars.beta_eq; pars.r_eq; pars.Ux_eq];
 
 %% Define control limits
+pars.delta_max = 35*pi/180;
 pars.FxR_max = pars.mu*pars.FzR;
 
 %% Controller parameters

@@ -33,12 +33,12 @@ for t = 1:nsteps
     %% Compute dynamics with ode45
 %     u_plus = pars.u0;
     
-    [~, x_plus] = ode45(@(t,x) Dynamics(x,u_plus,pars),[0 pars.dt],x);
-    x_plus = x_plus(end,:)';
+%     [~, x_plus] = ode45(@(t,x) Dynamics(x,u_plus,pars),[0 pars.dt],x);
+%     x_plus = x_plus(end,:)';
     
     %% Compute dynamics with euler integration
-%     dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
-%     x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
+    dx_plus = Dynamics(x,u_plus,pars); % Compute state x after control inputs u
+    x_plus = IntegrateDynamics(dx_plus,x,pars.dt);
 
     %% Compute vehicle position
     vs_plus = State(vs, x_plus, pars.dt);
@@ -91,7 +91,7 @@ xlabel('Time (s)'); ylabel('F_{X}R (N)');
 
 %% Visualize the trajectory
 
-player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
+% player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:))
 
 
 

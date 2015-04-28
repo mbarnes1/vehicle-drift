@@ -11,7 +11,7 @@ function [M] = player(X, Y, a, b, phi, delta_f)
 % Outputs:
 %       M - movie frames (use movie(M) to view, mpgwrite(M) to save)
 
-dsample = 10;
+dsample = 2;
 % Define the area to be recorded
 rect = get(gcf,'Position');
 rect(1:2) = [0 0];
