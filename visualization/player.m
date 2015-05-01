@@ -1,4 +1,4 @@
-function [M] = player(X, Y, a, b, phi, delta_f, sat_f, sat_r)
+function [M] = player(X, Y, a, b, phi, delta_f, sat_f, sat_r, tx, beta_eq, beta, r_eq, r, u_eq, u)
 %PLAYER Plots the vehicle state over time
 % Inputs:
 %       X - global x position
@@ -12,8 +12,8 @@ function [M] = player(X, Y, a, b, phi, delta_f, sat_f, sat_r)
 %
 % Outputs:
 %       M - movie frames (use movie(M) to view, mpgwrite(M) to save)
-
-dsample = 2;
+figure('position',[1 1 1000 400])
+dsample = 1;
 % Define the area to be recorded
 rect = get(gcf,'Position');
 rect(1:2) = [0 0];
@@ -21,17 +21,23 @@ sat_f(sat_f == 1) = 'r';
 sat_f(sat_f == 0) = 'k';
 sat_r(sat_r == 1) = 'r';
 sat_r(sat_r == 0) = 'k';
+
+writerObj = VideoWriter('drift.mp4');
+writerObj.FrameRate = 60;
+open(writerObj);
+
 % Generate and record the frames
 for i = 1:length(X)/dsample
   %Plot the overall trajectory
   j = i*dsample;  %downsampling
-  subplot(2,1,1);
-  plot(X, Y,'g--'); hold on; %trajectory
+  %subplot(2,1,1);
+  %plot(X, Y,'g--'); hold on; %trajectory
   cg = [X(j),Y(j)];  %vehile center of gravity in longitudinal direction
-  plot(cg(1), cg(2),'b.');  %plot current location
-  axis([min(X) max(X) min(Y) max(Y)]);
-  xlabel('X (m)'), ylabel('Y (m)'), title('Saturated Tire Model Vehicle');
-  subplot(2,1,2); %zoomed in plot
+  %plot(cg(1), cg(2),'b.');  %plot current location
+  %axis([min(X) max(X) min(Y) max(Y)]);
+  %xlabel('X (m)'), ylabel('Y (m)'), title('Saturated Tire Model Vehicle');
+  %subplot(2,1,2); %zoomed in plo
+  subplot(2,4,[1 2 5 6]);
   plot(X, Y,'g--'); hold on;  %trajectory
   
   %Plot body
@@ -49,16 +55,30 @@ for i = 1:length(X)/dsample
   line([fronttire(1) fronttire(2)],[fronttire(3) fronttire(4)], 'Color',char(sat_f(j)),'LineWidth',8);
   
   %Zoomed in plot
-  axis([X(j)-5*1.25 X(j)+4.25*1.25 Y(j)-1.5*1.25 Y(j)+1.5*1.25]);
+  axis([X(j)-3 X(j)+3 Y(j)-3 Y(j)+3]);
+  %axis 'auto x'
   xlabel('X (m)'), ylabel('Y (m)');
+  axis square
+  subplot(2,4,[3 4])
+  plot(tx, beta, 'b', 'LineWidth', 1.5); hold on;
+  plot(tx, beta_eq, 'g', 'LineWidth', 1.5);
+  plot(tx(i), beta(i), 'Marker', 'o', 'MarkerSize', 6, ...
+     'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
+  ylabel('Sideslip')
+  subplot(2,4,[7 8])
+  plot(tx, u, 'b', 'LineWidth', 1.5); hold on;
+  plot(tx, u_eq, 'g', 'LineWidth', 1.5);
+  plot(tx(i), u(i), 'Marker', 'o', 'MarkerSize', 6, ...
+     'MarkerFaceColor', 'r', 'MarkerEdgeColor', 'r');
+  ylabel('Forward Velocity');
+  xlabel('Time')
 
-  M(:,i) = getframe(gcf,rect); 
+  %M(:,i) = getframe(gcf,rect); 
+  frame = getframe(gcf, rect);
+  writeVideo(writerObj,frame);
+  
   clf; %clear the current figure  
 end
-% Play the movie
-clf
-N = 3; %number of times to loop
-FPS = 20;  %frames per second
-movie(gcf,M,N,FPS,rect)
+close(writerObj);
 
 end

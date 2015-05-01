@@ -97,7 +97,7 @@ xlabel('Time (s)'); ylabel('F_{X}R (N)');
 
 %% Visualize the trajectory
 
-player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:), mode-1, sat_r)
+player(VS(1,:), VS(2,:), pars.a, pars.b, VS(3,:), U(1,:), mode-1, sat_r, ts, ones(nsteps, 1)*pars.beta_eq*180/pi, X(1,:)*180/pi, ones(nsteps, 1)*pars.r_eq, X(2,:)*180/pi, ones(nsteps, 1)*pars.Ux_eq, X(3,:))
 
 
 
