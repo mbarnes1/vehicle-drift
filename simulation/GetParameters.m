@@ -6,9 +6,12 @@ pars.T = 10;            % seconds
 pars.dt = 1e-2;         % seconds
 
 %% Initial state and control
-pars.x0 = [(-20.44+20.44+40)*pi/180;         % Beta
-            0.600+0.2;                  % r
-            8+3];                     % Ux
+% pars.x0 = [(-20.44+20.44+40)*pi/180;         % Beta
+%            0.600+0.2;                  % r
+%            8+3];                     % Ux
+pars.x0 = [0*pi/180;         % Beta
+           0;                  % r
+           5];                     % Ux
 pars.u0 = [-12*pi/180;2293];
 pars.vs0 = [0;0;0];             % Initial vehicle position and orientation
 
@@ -28,17 +31,26 @@ pars.FzF = pars.b*pars.m*pars.g/pars.L;     % N
 pars.FzR = pars.a*pars.m*pars.g/pars.L;     % N
 
 %% Equilibrium point - hard coded
-pars.delta_eq   = -12*pi/180;   % rad
-pars.Ux_eq      = 8;            % m / s
+% pars.delta_eq   = -12*pi/180;   % rad
+% pars.Ux_eq      = 8;            % m / s
 
-pars.beta_eq    = -20.44*pi/180;% rad
+% pars.beta_eq    = -20.44*pi/180;% rad
 % pars.beta_eq    = -21.35*pi/180;% rad
-pars.r_eq       = 0.600;        % rad / s
+% pars.r_eq       = 0.600;        % rad / s
 % pars.r_eq       = 0.5061;        % rad / s
-pars.FxR_eq     = 2293;         % N
+% pars.FxR_eq     = 2293;         % N
 % pars.FxR_eq     = 2290;         % N
-pars.FyF_eq     = 3807;         % N
-pars.FyR_eq     = 4469;         % N
+% pars.FyF_eq     = 3807;         % N
+% pars.FyR_eq     = 4469;         % N
+
+pars.delta_eq   =  12*pi/180;   % rad
+pars.Ux_eq      =  8;            % m / s
+
+pars.beta_eq    =  20.44*pi/180; % rad
+pars.r_eq       = -0.6;          % rad / s
+pars.FxR_eq     =  2293;         % N
+pars.FyF_eq     = -3807;         % N
+pars.FyR_eq     = -4469;         % N
 
 pars.x_eq = [pars.beta_eq; pars.r_eq; pars.Ux_eq];
 
