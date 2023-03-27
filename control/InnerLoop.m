@@ -37,6 +37,8 @@ function [delta_des,FxR_des,success] = Mode1(x,e_x,pars)
     e_r = e_x(2);
     e_Ux = e_x(3);
     
+    beta_eq = pars.beta_eq;
+    
     % Compute constants
     [k1,k2] = Compute_ks(x(3), pars);
 
@@ -46,16 +48,22 @@ function [delta_des,FxR_des,success] = Mode1(x,e_x,pars)
     FxR_des = max(FxR_des, 0);
     
     % Compute rear lateral force based on current state
-%     FyR_des = a*m/L*r*Ux;   % Page 42 of Thesis - is this valid for normal use?
-    alphaR = atan(beta - b/Ux*r);
-    FyR_des = Fiala('rear', pars.CaR, pars.mu, pars.FzR, FxR_des, alphaR);
+    % FyR_des = a*m/L*r*Ux;   % Page 42 of Thesis - is this valid for normal use?
+    % alphaR = atan(beta - b/Ux*r);
+    % FyR_des = Fiala('rear', pars.CaR, pars.mu, pars.FzR, FxR_des, alphaR);
+    % FyR_des should be calculated based on the saturation condition
+    if beta_eq < 0
+        FyR_des =  sqrt((mu*FzR)^2 - FxR_des^2);
+    else
+        FyR_des = - sqrt((mu*FzR)^2 - FxR_des^2);
+    end
     
     % Compute desired front lateral force
     FyF_des = 1/k1 * ( k2 * FyR_des - K_beta^2 * e_beta - K_beta * r_eq - ...
         (K_beta + K_r) * e_r );
     
     % Compute desired steering angle if this is possible
-    if FyF_des < pars.mu*pars.FzF
+    if abs(FyF_des) < pars.mu*pars.FzF
         % Compute desired steering angle
         delta_des = FyF2delta(x, FyF_des, pars);
         success = true;
@@ -79,11 +87,18 @@ function [delta_des,FxR_des] = Mode2(x,e_x,pars)
     e_beta = e_x(1);
     e_r = e_x(2);
     
+    beta_eq = pars.beta_eq;
+    
     % Compute constants
     [k1,k2] = Compute_ks(x(3), pars);
     
     % Compute desired front lateral force - saturated
-    FyF_des = mu * FzF;
+    % FyF_des = mu * FzF;
+    if beta_eq < 0
+        FyF_des =   mu * FzF;
+    else
+        FyF_des = - mu * FzF;
+    end
     
     % Compute desired rear lateral force
     FyR_des = 1/k2 * (k1 * mu * FzF + K_beta^2 * e_beta + K_beta * r_eq + ...
